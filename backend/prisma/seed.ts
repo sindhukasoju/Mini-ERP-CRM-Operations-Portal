@@ -1,4 +1,4 @@
-import { PrismaClient, Role } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
@@ -12,34 +12,36 @@ async function main() {
         name: "Admin",
         email: "admin@fundsroom.com",
         password,
-        role: Role.ADMIN,
+        role: "ADMIN",
       },
       {
         name: "Sales",
         email: "sales@fundsroom.com",
         password,
-        role: Role.SALES,
+        role: "SALES",
       },
       {
         name: "Warehouse",
         email: "warehouse@fundsroom.com",
         password,
-        role: Role.WAREHOUSE,
+        role: "WAREHOUSE",
       },
       {
         name: "Accounts",
         email: "accounts@fundsroom.com",
         password,
-        role: Role.ACCOUNTS,
+        role: "ACCOUNTS",
       },
     ],
   });
 
   console.log("Users seeded successfully");
 }
-
+//Added proper logic
 main()
   .catch(console.error)
   .finally(async () => {
     await prisma.$disconnect();
   });
+//   Email: admin@fundsroom.com
+// Password: password123

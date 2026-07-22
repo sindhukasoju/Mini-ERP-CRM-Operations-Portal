@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { getChallans, getChallanById, createChallan, confirmChallan } from '../controllers/challanController';
-import { authenticateToken, authorizeRole } from '../middleware/auth';
+import { authenticateToken, authorizeRole } from '../middleware/authmiddleware';
 
 const router = Router();
 

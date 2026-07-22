@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { getProducts, createProduct, updateProduct, getStockMovements, addStockMovement } from '../controllers/productController';
-import { authenticateToken, authorizeRole } from '../middleware/auth';
+import { authenticateToken, authorizeRole } from '../middleware/authmiddleware';
 
 const router = Router();
 

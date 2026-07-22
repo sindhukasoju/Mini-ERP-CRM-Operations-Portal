@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { getCustomers, getCustomerById, createCustomer, updateCustomer } from '../controllers/customerController';
-import { authenticateToken, authorizeRole } from '../middleware/auth';
+import { authenticateToken, authorizeRole } from '../middleware/authmiddleware';
 
 const router = Router();
 
