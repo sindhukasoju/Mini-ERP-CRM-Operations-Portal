@@ -3,10 +3,39 @@ import { prisma } from '../server';
 
 export const getCustomers = async (req: Request, res: Response) => {
   try {
+    const { search, page = '1', limit = '50' } = req.query;
+    const skip = (Number(page) - 1) * Number(limit);
+    
+    let whereClause = {};
+    if (search) {
+      whereClause = {
+        OR: [
+          { name: { contains: String(search) } },
+          { businessName: { contains: String(search) } },
+          { mobile: { contains: String(search) } }
+        ]
+      };
+    }
+
     const customers = await prisma.customer.findMany({
+      where: whereClause,
       orderBy: { createdAt: 'desc' },
+      skip,
+      take: Number(limit)
     });
-    res.json(customers);
+    
+    // Also return total count for pagination metadata
+    const total = await prisma.customer.count({ where: whereClause });
+    
+    res.json({
+      data: customers,
+      meta: {
+        total,
+        page: Number(page),
+        limit: Number(limit),
+        totalPages: Math.ceil(total / Number(limit))
+      }
+    });
   } catch (error) {
     console.error('Error fetching customers:', error);
     res.status(500).json({ error: 'Internal server error' });

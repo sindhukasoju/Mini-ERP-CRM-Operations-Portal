@@ -35,7 +35,8 @@ const Customers: React.FC = () => {
   const fetchCustomers = async () => {
     try {
       const res = await api.get('/customers');
-      setCustomers(res.data);
+      // We check for res.data.data because the backend now returns { data: [], meta: {} }
+      setCustomers(res.data.data || res.data);
     } catch (error) {
       console.error('Failed to fetch customers', error);
     } finally {

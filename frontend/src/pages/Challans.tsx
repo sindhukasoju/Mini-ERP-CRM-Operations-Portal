@@ -51,9 +51,10 @@ const Challans: React.FC = () => {
 
   const fetchDependencies = async () => {
     try {
-      const custRes = await api.get('/customers');
+      const custRes = await api.get('/customers?limit=100');
       const prodRes = await api.get('/products');
-      setCustomers(custRes.data);
+      // Handle the paginated response structure for customers
+      setCustomers(custRes.data.data || custRes.data);
       setProducts(prodRes.data);
     } catch (error) {
       console.error('Failed to fetch dependencies', error);
