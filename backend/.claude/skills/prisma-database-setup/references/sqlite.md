@@ -12,7 +12,7 @@ In `prisma/schema.prisma`:
 
 ```prisma
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
 }
 
 generator client {
