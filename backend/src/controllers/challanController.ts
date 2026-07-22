@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { prisma } from '../server';
-import { AuthRequest } from '../middleware/auth';
+import { AuthRequest } from '../middleware/authmiddleware';
 
 export const getChallans = async (req: Request, res: Response) => {
   try {
