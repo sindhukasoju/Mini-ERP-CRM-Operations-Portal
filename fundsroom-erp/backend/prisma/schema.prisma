@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  role      String   // 'ADMIN', 'SALES', 'WAREHOUSE', 'ACCOUNTS'
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  movements StockMovement[]
+  challans  Challan[]
+}
+
+model Customer {
+  id           Int       @id @default(autoincrement())
+  name         String
+  mobile       String
+  email        String?
+  businessName String
+  gstNumber    String?
+  type         String    // 'RETAIL', 'WHOLESALE', 'DISTRIBUTOR'
+  address      String
+  status       String    @default("ACTIVE") // 'LEAD', 'ACTIVE', 'INACTIVE'
+  followUpDate DateTime?
+  notes        String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  challans     Challan[]
+}
+
+model Product {
+  id            Int      @id @default(autoincrement())
+  name          String
+  sku           String   @unique
+  category      String
+  unitPrice     Float
+  currentStock  Int      @default(0)
+  minStockAlert Int      @default(10)
+  location      String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  movements     StockMovement[]
+}
+
+model StockMovement {
+  id        Int      @id @default(autoincrement())
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id])
+  quantity  Int
+  type      String   // 'IN', 'OUT'
+  reason    String
+  createdBy Int
+  user      User     @relation(fields: [createdBy], references: [id])
+  timestamp DateTime @default(now())
+}
+
+model Challan {
+  id            Int      @id @default(autoincrement())
+  challanNumber String   @unique
+  customerId    Int
+  customer      Customer @relation(fields: [customerId], references: [id])
+  totalQuantity Int
+  status        String   @default("DRAFT") // 'DRAFT', 'CONFIRMED', 'CANCELLED'
+  createdBy     Int
+  user          User     @relation(fields: [createdBy], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  items         ChallanItem[]
+}
+
+model ChallanItem {
+  id                   Int     @id @default(autoincrement())
+  challanId            Int
+  challan              Challan @relation(fields: [challanId], references: [id])
+  productId            Int
+  productSnapshotName  String
+  productSnapshotSku   String
+  productSnapshotPrice Float
+  quantity             Int
+}
