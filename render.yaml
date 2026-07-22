@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: fundsroom-erp-backend
+    env: node
+    rootDir: backend
+    buildCommand: npm install && npx prisma generate && npx prisma db push && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_VERSION
+        value: 20.x
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false # Requires you to manually paste your Neon Postgres URL in the Render dashboard
